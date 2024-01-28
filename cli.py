@@ -7,10 +7,13 @@ from bookmarklint import analyze
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description='Audit exported bookmark URL lists for duplicates and invalid schemes')
-    parser.add_argument('path', help='Input data file')
+    parser.add_argument('path', help='Input data file, or - for standard input')
     args = parser.parse_args(argv)
-    with open(args.path, encoding='utf-8') as f:
-        data = f.read()
+    if args.path == '-':
+        data = sys.stdin.read()
+    else:
+        with open(args.path, encoding='utf-8') as f:
+            data = f.read()
     print(json.dumps(analyze(data), sort_keys=True))
     return 0
 
